@@ -41,3 +41,16 @@ def Envelop_tfunc(t, b=4, c=0.8):
 # plt.show()
 
 
+
+
+# Need to focus on the shape 
+
+A_n = np.sqrt(2 * Sww * delta_w)
+
+# e.g. Sww -> (65, 41)
+
+# self.t_axis_4simu -> (2688, )
+
+A_n[i] * np.cos(w_n[i] * self.t_axis_4simu + phi_n[i])
+
+A_n[i].shape <--> self.t_axis_4simu

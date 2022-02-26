@@ -5,10 +5,10 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+from scipy import interpolate
 
-from KT_model import parameterized_KT_model, Envelop_tfunc1
+from KT_model import parameterized_KT_model, Envelop_tfunc1, nonsta_model
 # np.random.seed(9527)
-
 
 
 class SRM:
@@ -18,22 +18,26 @@ class SRM:
         self.fs = fs
         self.duration = duration
     # print('the cutoff frequency wu set as:', wu)
+        self.t_axis_4simu = np.arange(0, self.duration, 1 / self.fs)  # dt = 1 / Fs
+        self.w_axis_4simu = np.arange(0, self.wu, self.wu/self.N1)
 
 
-    @property
-    def t_axis_simu(self):
-        """Create the t-axis of the sample simulation"""
-        t_axis_simu = np.arange(0, self.duration, 1 / self.fs)  # dt = 1 / Fs
-        return t_axis_simu
+    # @property
+    # def t_axis_4simu(self):
+    #     """Create the t-axis of the sample simulation"""
+    #     t_axis_simu = np.arange(0, self.duration, 1 / self.fs)  # dt = 1 / Fs
+    #     return t_axis_simu
+
+
+    # # set up the w (rad/s) axis
+    # @property
+    # def w_axis_4simu(self):
+    #     w_axis = np.arange(0, self.wu, self.wu/self.N1)
+    #     return w_axis 
 
 
 
-
-
-
-
-
-    def SpecRepsentation(self, Sww):
+    def SpecRepsentation(self, Sww, plot='y'):
         '''
         For now, this func received a spectra as argument,
         which may be obtained from 'getSww_from_a_model' func
@@ -49,14 +53,45 @@ class SRM:
         # Note that A0=0 or S(w0)=0
         sum = 0
         for i in range(1, self.N1):
-            sum = sum + A_n[i] * np.cos(w_n[i] * self.t_axis_simu + phi_n[i])
-    
+            sum = sum + A_n[i] * np.cos(w_n[i] * self.t_axis_4simu + phi_n[i])
         simulation = sum * np.sqrt(2)
         # print('sampling frequency:', Fs)
         t_upper_limit = 2 * np.pi / (2 * self.wu)
         print("the lower limit of sampling frequency:", math.ceil(1 / t_upper_limit))
         print("the length of the simulation", simulation.shape)
+        if plot == 'y':
+            plt.plot(self.t_axis_4simu, simulation)
         return simulation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
