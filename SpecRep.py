@@ -23,7 +23,6 @@ class SRM:
         self.t_axis_4simu = np.arange(0, self.duration, 1 / self.fs)  # dt = 1 / Fs
         self.w_axis_4simu = np.arange(0, self.wu, self.wu/self.N1)
 
-
     # @property
     # def t_axis_4simu(self):
     #     """Create the t-axis of the sample simulation"""
@@ -36,8 +35,6 @@ class SRM:
     # def w_axis_4simu(self):
     #     w_axis = np.arange(0, self.wu, self.wu/self.N1)
     #     return w_axis 
-
-
 
     def SpecRepsentation(self, Sww, plot='y'):
         '''
@@ -64,7 +61,6 @@ class SRM:
         if plot == 'y':
             plt.plot(self.t_axis_4simu, simulation)
         return simulation
-
 
 
 
@@ -104,13 +100,6 @@ class SRM:
 
 
 
-
-
-
-
-
-
-
     def SpecRepsentation2(self, Sww, t_bins, freqs, plot='y'):
         """
         Idea:
@@ -146,6 +135,9 @@ class SRM:
 
         ''' before: x -> t_axis
                     y -> w_axis
+            eg. (65, 41)
+        
+            After: (N1, duration * Fs) -> (1024, 2500)
         '''
 
 

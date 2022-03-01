@@ -54,3 +54,11 @@ A_n = np.sqrt(2 * Sww * delta_w)
 A_n[i] * np.cos(w_n[i] * self.t_axis_4simu + phi_n[i])
 
 A_n[i].shape <--> self.t_axis_4simu
+
+
+
+# starting from one dimension
+# A_n[i].shape <--> self.t_axis_4simu
+
+# step 2: for w_axis
+# before (65, x) -> (1024, x)
