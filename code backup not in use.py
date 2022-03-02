@@ -15,3 +15,16 @@ import matplotlib.pyplot as plt
 
             A_new = f(self.t_axis_4simu)
             sum = sum + A_new * np.cos(w_n[i] * self.t_axis_4simu + phi_n[i])
+
+
+
+
+# for backing up
+
+# X, Y = np.meshgrid(t_bins, freqs)
+# Z = Pxx
+
+# fig = plt.figure(figsize=(8,8))
+# ax = plt.axes(projection='3d')
+# ax.plot_surface(X, Y, Z, cmap='viridis')
+# ax.set_title('plot surface');
