@@ -28,3 +28,18 @@ import matplotlib.pyplot as plt
 # ax = plt.axes(projection='3d')
 # ax.plot_surface(X, Y, Z, cmap='viridis')
 # ax.set_title('plot surface');
+
+"""For 2D representation"""
+
+# import matplotlib
+# fig = plt.figure(figsize=(6,4))
+
+# # nnormalize_instance = matplotlib.colors.Normalize()
+
+# plt.pcolormesh(t_bins, freqs, Pxx, vmin=0, vmax=np.max(Pxx), shading='nearest', cmap='coolwarm')
+# plt.colorbar()
+# plt.xlabel('time (s)')
+# plt.ylabel('freq (HZ)')
+# # plt.grid()
+# plt.title(r'$S_{wt}$')
+# plt.show()

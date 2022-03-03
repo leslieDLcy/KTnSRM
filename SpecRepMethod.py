@@ -2,14 +2,17 @@
 # implementation for the Kanai Tajimi model and also
 # implementation for Spectral Representation method by Shinozuka
 
-from optparse import Values
+# from optparse import Values
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+import itertools
+import pandas as pd
 from scipy import interpolate
 from scipy.interpolate import griddata
+from utils import EPSD_show
 
-from KT_model import parameterized_KT_model, Envelop_tfunc1, nonsta_model
+# from KT_model import parameterized_KT_model, Envelop_tfunc1, nonsta_model
 # np.random.seed(9527)
 
 
@@ -36,7 +39,7 @@ class SRM:
     #     w_axis = np.arange(0, self.wu, self.wu/self.N1)
     #     return w_axis 
 
-    def SpecRepsentation(self, Sww, plot='y'):
+    def _SpecRepsentation0(self, Sww, plot='y'):
         '''
         For now, this func received a spectra as argument,
         which may be obtained from 'getSww_from_a_model' func
@@ -60,7 +63,82 @@ class SRM:
         print("the length of the simulation", simulation.shape)
         if plot == 'y':
             plt.plot(self.t_axis_4simu, simulation)
+            plt.xlabel('time [s]')
+            plt.ylabel('amp')
         return simulation
+
+
+    @staticmethod
+    def getSww_from_a_model(model, w_axis):
+        return model(w_axis)
+
+
+
+    def _interpo_spectra(self, Pxx, freqs, t_bins, plotting=True, format='2d', title_name='interpolated_spectra'):
+    
+        """
+        Given Swt estimated by STFT, 
+        ie. Pxx, freqs, t_bins, im = ax2.specgram(...)
+        
+        Follow the example procedures;
+        # Points, values, and then new coordinates
+        """
+        points  = list(itertools.product(t_bins, freqs))
+        sample_df = pd.DataFrame()
+        sample_df['X'] = [xy[0] for xy in points]
+        sample_df['Y'] = [xy[1] for xy in points]
+    
+        up_reversed = np.flipud(Pxx)
+        values = np.ravel(up_reversed, order='F')
+    
+        x_min, x_max = 0.0, sample_df['X'].max()
+        y_min, y_max = 0.0, sample_df['Y'].max()
+    
+        new_x_coord = np.linspace(x_min, x_max, self.duration * self.fs)
+        new_y_coord = np.linspace(y_min, y_max, self.N1)
+        xx, yy = np.meshgrid(new_x_coord, new_y_coord)
+    
+        grid_z0 = griddata(points, values, xi=(xx, yy), method='nearest')
+        grid_z1 = np.flipud(grid_z0)
+        
+        self._interpolated_bundle = (grid_z1, new_y_coord, new_x_coord)
+        # if plotting:
+        #     # plotting the Swt on new axes
+        #     EPSD_show(grid_z1, new_y_coord, new_x_coord, format=format, title_name=title_name)
+        return grid_z1
+    
+
+
+    def _get_interpolated_spectra(self, format):
+        EPSD_show(*self._interpolated_bundle, format=format, title_name='interpolated spectra')
+        # plt.show()       
+
+    
+
+    def nonsta_simulation(self, Pxx, freqs, t_bins, plotting=False):
+        """
+        For given estimated spectra, do interpolation first and then do simulation;
+        
+        Paramters:
+        ---------
+        Pxx, freqs, t_bins: 
+        Given the estimated spectra by STFT
+
+        **kwargs :
+        Used to control if showing the estimated spectra in 2d or 3d
+        """
+        interpolated_Swt = self._interpo_spectra(Pxx, freqs, t_bins)
+        x = self._SpecRepsentation0(interpolated_Swt, plot='y')
+        return x
+
+
+
+
+
+
+
+
+
 
 
 
@@ -213,26 +291,4 @@ the less `dt` then the higher `Fs`
 # the relation between `Fs` and `wu`
 
 
-def getSww_from_a_model(model, w_axis):
-    # For now, it's used to give a spectra
-    
-    ''' stationary Sww -> a shape (N1, ) '''
-    # Hint: the simplest case, only care resolution in `w_axis` and no `t_axis` is involved;
-    # Since we are using a continuous func `parameterized_KT_model`, any input w will have a value;
-    # so all good
 
-    # Sww = PSDF(w_n)
-
-    # back up
-    # A_n = np.sqrt(2 * parameterize_KT_model(w_n) * delta_w)
-
-
-    '''  non-stationary: S(w, t), which should have a shape (N1, t) '''
-    # Hint: in this situation, we don't need to worry about t dimension;
-
-
-    # Sww = EPSD(w_n) -> (N1, t)
-    # a hint: for fs=100, duration=16 -> t = (1600, )
-
-    # Sww = nonstatinary_model(w_n)
-    return model(w_axis)

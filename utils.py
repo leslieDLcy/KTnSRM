@@ -5,7 +5,7 @@ import pandas as pd
 from matplotlib import mlab
 from scipy.interpolate import griddata
 
-def EPSD_show(Pxx, freqs, t_bins, format):
+def EPSD_show(Pxx, freqs, t_bins, format, title_name='the estimated spectra'):
         """Given the 3 elements returned by plt.specgram
         ie, (Pxx, freqs, t_bins)
         ----
@@ -22,16 +22,17 @@ def EPSD_show(Pxx, freqs, t_bins, format):
             plt.xlabel('time (s)')
             plt.ylabel('freq (HZ)')
             # plt.grid()
-            plt.title(r'the estimated  $S_{wt}$')
+            plt.title(f'{title_name}')
         elif format=='3d':
             fig = plt.figure(figsize=(8,8))    
+            ax = plt.axes(projection='3d')
             X, Y = np.meshgrid(t_bins, freqs)
             Z = Pxx
-            ax = plt.axes(projection='3d')
             ax.plot_surface(X, Y, Z, cmap='viridis')
             ax.set_xlabel('time (s)')
             ax.set_ylabel('frequency (hz)')
             ax.set_zlabel('PSD')
+            ax.set_title(f'{title_name}')
 
 
 def specgram3d(y, fs=200, title=None):
