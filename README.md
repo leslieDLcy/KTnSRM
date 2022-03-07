@@ -13,11 +13,3 @@ The implementation of Kanai Tajimi model (**KT model**) and the Spectral Represe
 
 ###Non-stationary simulation using the estimated EPSDF
 
-Note that from the estimated PSDF, we need to first do interpolation! 
-
-
-
-
-
-s
-

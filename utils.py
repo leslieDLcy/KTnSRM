@@ -17,8 +17,9 @@ def EPSD_show(Pxx, freqs, t_bins, format, title_name='the estimated spectra'):
                     vmin=0, 
                     vmax=np.max(Pxx), 
                     shading='nearest', 
-                    cmap='coolwarm')
+                    cmap='BuPu')
             plt.colorbar()
+            plt.ylim([0, 15])
             plt.xlabel('time (s)')
             plt.ylabel('freq (HZ)')
             # plt.grid()
@@ -28,7 +29,7 @@ def EPSD_show(Pxx, freqs, t_bins, format, title_name='the estimated spectra'):
             ax = plt.axes(projection='3d')
             X, Y = np.meshgrid(t_bins, freqs)
             Z = Pxx
-            ax.plot_surface(X, Y, Z, cmap='viridis')
+            ax.plot_surface(X, Y, Z, cmap='jet')
             ax.set_xlabel('time (s)')
             ax.set_ylabel('frequency (hz)')
             ax.set_zlabel('PSD')
